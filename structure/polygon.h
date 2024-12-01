@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Polygon{
+  // Vértices del Polígono, R3 puntos en el espacio 3D
   std::vector<R3> vertex;
 
   Polygon(){}
