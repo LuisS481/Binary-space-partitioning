@@ -85,7 +85,7 @@ struct Polygon{
     return true;
   }
 
-  bool intersects(const Polygon &other){
+  bool intersects(const Polygon &other) const{
     for (const auto &v : vertex){
       if (other.isInside(v)) return true;
     }

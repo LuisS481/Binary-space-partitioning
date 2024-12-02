@@ -17,6 +17,8 @@ struct BSPTreeNode {
   ~BSPTreeNode() {
     delete front;
     delete back;
+    front = nullptr;
+    back = nullptr;
 }
 };
 

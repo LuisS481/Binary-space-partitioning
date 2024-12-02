@@ -33,6 +33,15 @@ int main() {
                        });
     bsptree.insertarPoligono(newPolygon);  // Insertamos el nuevo polígono
 
+
+    //intersecciones(?
+    if (bsptree.interseccion(newPolygon)) {
+        std::cout << "El objeto intersecta con un polígono en el árbol BSP.\n";
+    } else {
+        std::cout << "El objeto no intersecta con ningún polígono en el árbol BSP.\n";
+    }
+    
+    
     // tree.print(); // Falta
     return 0;
 }

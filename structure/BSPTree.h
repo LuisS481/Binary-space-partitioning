@@ -83,6 +83,42 @@ private:
         delete node;
     }
 
+
+    //Método para verificar si existen intersecciones
+    bool interseccionBSPTree(BSPTreeNode* node, const Polygon& objeto) {
+      //Si el nodo actual es nulo, no hay intersección
+      if (!node) {
+          return false;
+      }
+
+      //Calcular la posición del objeto respecto al plano de partición del nodo actual
+      float A = node->A, B = node->B, C = node->C, D = node->D;
+
+      if (objeto.isFrontOf(A, B, C, D)) {
+          return interseccionBSPTree(node->front, objeto);
+
+      } else if (objeto.isBackOf(A, B, C, D)) {
+          return interseccionBSPTree(node->back, objeto);
+
+
+      } else {
+          // Verificar si el objeto intersecta algún polígono asociado al nodo actual
+          for (const auto& poly : node->polygons) {
+              if (objeto.intersects(poly)) {
+                  return true; // Se encontró una intersección
+              }
+          }
+
+          //Verificar en ambos subárboles
+          bool interseccionFrontal = interseccionBSPTree(node->front, objeto);
+          bool interseccionTrasera = interseccionBSPTree(node->back, objeto);
+
+          //Retornar true si hay intersección en cualquier sub árbol
+          return interseccionFrontal || interseccionTrasera;
+      }
+}
+
+
 public:
 
     // Constructor
@@ -99,4 +135,16 @@ public:
     void insertarPoligono(const Polygon& p){
         root = insertarBSPTree(root, p);
     }
+
+
+    BSPTreeNode* getRoot() const {
+        return root;
+    }
+
+    // Método público para la intersección
+    bool interseccion(const Polygon& objeto) {
+        return interseccionBSPTree(root, objeto);
+        
+    }
+
 };
