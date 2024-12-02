@@ -24,6 +24,15 @@ int main() {
     }
 }
     BSPTree bsptree(polygons);
+
+    // Ahora, insertamos un nuevo polígono
+    Polygon newPolygon({
+                               R3(0, 0, 1),
+                               R3(1, 0, 1),
+                               R3(0, 1, 1)
+                       });
+    bsptree.insertarPoligono(newPolygon);  // Insertamos el nuevo polígono
+
     // tree.print(); // Falta
     return 0;
 }
