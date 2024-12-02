@@ -45,6 +45,36 @@ private:
     return node;
   }
 
+    // Método de inserción recursivo
+    BSPTreeNode* insertarBSPTree(BSPTreeNode* node, const Polygon& p){
+        if (!node) {
+            // Si llegamos a un nodo vacío, creamos un nuevo nodo con el polígono como plano de particion
+            BSPTreeNode* newNode = new BSPTreeNode(p.normal().x, p.normal().y, p.normal().z,
+                                                   -(p.normal().x * p.vertex[0].x + p.normal().y * p.vertex[0].y + p.normal().z * p.vertex[0].z));
+            newNode->polygons.push_back(p);
+            return newNode;
+        }
+
+        // Calcular la posición del polígono con respecto al plano del nodo actual
+        float A = node->A, B = node->B, C = node->C, D = node->D;
+        if (p.isFrontOf(A, B, C, D)) {
+            // Si está completamente frente al plano, insertamos en el nodo frontal
+            node->front = insertarBSPTree(node->front, p);
+        } else if (p.isBackOf(A, B, C, D)) {
+            // Si está completamente detrás del plano, insertamos en el nodo trasero
+            node->back = insertarBSPTree(node->back, p);
+        } else {
+            // Si el polígono cruza el plano, lo dividimos y lo insertamos recursivamente
+            Polygon frontPart, backPart;
+            p.divide(A, B, C, D, frontPart, backPart);
+
+            node->front = insertarBSPTree(node->front, frontPart);
+            node->back = insertarBSPTree(node->back, backPart);
+        }
+
+        return node;
+    }
+
   // Eliminar árbol
   void deleteTree(BSPTreeNode* node) {
         if (!node) return;
@@ -65,4 +95,8 @@ public:
         deleteTree(root);
     }   
 
+    // Método público para insertar un polígono en el BSP
+    void insertarPoligono(const Polygon& p){
+        root = insertarBSPTree(root, p);
+    }
 };
